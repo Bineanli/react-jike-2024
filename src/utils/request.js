@@ -1,4 +1,5 @@
 import axios from "axios"; 
+import { getToken } from "./token";
 //axios的封装，统一处理请求
 
 
@@ -15,6 +16,15 @@ const request = axios.create({
 // 添加请求拦截器
 // 在发送请求之前做一些处理自定义的逻辑，比如设置 headers、token 等
 request.interceptors.request.use((config)=> {
+  //操作config注入token
+  //1.获取本地存储的token
+  //2.按照后端的格式要求做token的拼接
+
+  const token = getToken()
+  if(token){
+    config.headers.Authorization = `Bearer ${token}`
+  }
+
     return config
   }, (error)=> {
     return Promise.reject(error)
